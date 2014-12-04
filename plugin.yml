@@ -1,7 +1,0 @@
-name: SocketCommander Remake Version
-version: '2014-11-30'
-main: me.neon.soc.a72.Main
-commands:
-   soc:
-      description: The base command for add IP Adress.
-      usage: /soc <ip>
