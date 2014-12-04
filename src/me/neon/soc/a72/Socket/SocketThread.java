@@ -7,9 +7,6 @@ import java.net.Socket;
 import me.neon.soc.a72.Main;
 import me.neon.soc.a72.Message.Message;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-
 public class SocketThread
   extends Thread
 {

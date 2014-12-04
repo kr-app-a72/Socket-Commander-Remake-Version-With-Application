@@ -3,8 +3,6 @@ package me.neon.soc.a72.Message;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import me.neon.soc.a72.Socket.SocketThread;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
@@ -22,7 +20,7 @@ public class Message {
 		Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE + str);
 	}
 
-	public void send_Message(DataOutputStream dos, String str) {
+	public static void send_Message(DataOutputStream dos, String str) {
 		try {
 			dos.writeUTF(str);
 		} catch (IOException e) {

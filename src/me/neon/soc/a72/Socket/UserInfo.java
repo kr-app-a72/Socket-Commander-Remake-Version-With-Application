@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import me.neon.soc.a72.Main;
 import me.neon.soc.a72.Message.Message;
 
 class UserInfo
@@ -53,13 +54,13 @@ class UserInfo
         if (msg.startsWith("/"))
         {
           String _msg = msg.replace("/", "");
-          SocketThread.__send_Message(_msg);
-          send_Message("전체 메세지 전송 성공 (" + _msg + ")");
+          Message.__send_Message(_msg);
+          Message.send_Message(dos,"전체 메세지 전송 성공 (" + _msg + ")");
         }
         else
         {
-          SocketThread.InputtoServer(msg);
-          send_Message("커맨드 전송 성공 (" + msg + ")");
+          Message.InputtoServer(msg);
+          Message.send_Message(dos,"커맨드 전송 성공 (" + msg + ")");
         }
       }
     }
@@ -70,7 +71,8 @@ class UserInfo
         this.dos.close();
         this.dis.close();
         this.user_socket.close();
-        SocketThread._send_Message("사용자 접속이 끊어졌습니다.\n");
+        Message._send_Message("사용자 접속이 끊어졌습니다.\n");
+        Main.Connection_Count--;
       }
       catch (Exception localException) {}
     }
