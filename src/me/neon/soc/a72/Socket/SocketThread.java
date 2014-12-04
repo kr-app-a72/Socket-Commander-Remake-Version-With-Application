@@ -38,7 +38,7 @@ public class SocketThread
             this.soc = this.socket.accept();
             String cip = this.soc.getInetAddress().getHostAddress();
             if ((this.plugin.allowall) || 
-              (this.plugin.configiplist.contains(cip)))
+              (this.plugin.ip.contains(cip)))
             {
               Main.pwal.put(cip, Boolean.valueOf(false));
               if (Main.Connection_Count < 5){

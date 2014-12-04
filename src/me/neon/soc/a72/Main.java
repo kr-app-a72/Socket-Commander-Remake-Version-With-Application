@@ -13,7 +13,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Main
   extends JavaPlugin
 {
-  public ArrayList<String> configiplist;
   public ArrayList<String> ip = new ArrayList<String>();
   public static HashMap<String, Boolean> pwal = new HashMap<String, Boolean>();
   public static Random r = new Random();
@@ -47,9 +46,9 @@ public void onEnable()
     } else {
     	port = config.getInt("포트");
     }
-    this.configiplist = new ArrayList<String>();
+    this.ip = new ArrayList<String>();
     if (!(this.allowall = config.getBoolean("모두 허용"))) {
-      this.configiplist = ((ArrayList<String>)config.get("허용 IP"));
+      this.ip = ((ArrayList<String>)config.get("허용 IP"));
     }
     initCommand();
     this.s = new SocketThread(this, port);
