@@ -2,10 +2,6 @@ package me.neon.soc.a72.Message;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-
-import me.neon.soc.a72.Data.ServerDate;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
@@ -29,9 +25,5 @@ public class Message {
 		} catch (IOException e) {
 			_send_Message("메시지 송신 에러 발생\n");
 		}
-	}
-	public static void send_ServerData(){
-		
-		
 	}
 }
