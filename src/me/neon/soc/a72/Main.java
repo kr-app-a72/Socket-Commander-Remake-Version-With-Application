@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.logging.Logger;
 
 import me.neon.soc.a72.Command.CommandManager;
+import me.neon.soc.a72.Socket.DataSocketThread;
 import me.neon.soc.a72.Socket.SocketThread;
 
 import org.bukkit.configuration.file.*;
@@ -20,6 +21,7 @@ public class Main
   public static Logger log = Logger.getLogger("Minecraft");
   public boolean allowall;
   private SocketThread s;
+  private DataSocketThread d_s;
   public static String Load = "";
   public static boolean version = true;
   public static boolean fail = false;
@@ -27,6 +29,7 @@ public class Main
   public static boolean stop = false;
   private static CommandManager Command;
   public int port = 0;
+  public int d_port = 0;
   public static int Connection_Count = 0;
   
 @SuppressWarnings("unchecked")
@@ -48,8 +51,8 @@ public void onEnable()
     	port = config.getInt("명령어 및 알림 포트");
     }
     if (config.getInt("데이터 포트") == -1){
-    	port = port+10;
-    	config.set("데이터 포트", port);
+    	d_port = port+10;
+    	config.set("데이터 포트", d_port);
     } else {
     	port = config.getInt("데이터 포트");
     }
@@ -59,6 +62,7 @@ public void onEnable()
     }
     initCommand();
     this.s = new SocketThread(this, port);
+    this.d_s = new DataSocketThread(this,d_port);
  
   }
   
