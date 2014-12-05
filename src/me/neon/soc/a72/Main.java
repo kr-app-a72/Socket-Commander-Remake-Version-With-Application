@@ -37,14 +37,21 @@ public void onEnable()
     this.ip.add("0.0.0.0");
     config.addDefault("모두 허용", Boolean.valueOf(false));
     config.addDefault("허용 IP", this.ip);
-    config.addDefault("포트", -1);
+    config.addDefault("명령어 및 알림 포트", -1);
+    config.addDefault("데이터 포트", -1);
     config.options().copyDefaults(true);
     saveConfig();
-    if (config.getInt("포트") == -1){
+    if (config.getInt("명령어 및 알림 포트") == -1){
     	port = Integer.valueOf(r.nextInt(65565) + 1).intValue();
-    	config.set("포트", port);
+    	config.set("명령어 및 알림 포트", port);
     } else {
-    	port = config.getInt("포트");
+    	port = config.getInt("명령어 및 알림 포트");
+    }
+    if (config.getInt("데이터 포트") == -1){
+    	port = port+10;
+    	config.set("데이터 포트", port);
+    } else {
+    	port = config.getInt("데이터 포트");
     }
     this.ip = new ArrayList<String>();
     if (!(this.allowall = config.getBoolean("모두 허용"))) {

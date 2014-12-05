@@ -1,5 +1,5 @@
 name: SocketCommander Remake Version
-version: '2014-11-30'
+version: '2014-12-05'
 main: me.neon.soc.a72.Main
 commands:
    soc:
