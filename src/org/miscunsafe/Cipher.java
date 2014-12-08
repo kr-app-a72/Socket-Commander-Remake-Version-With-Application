@@ -66,9 +66,4 @@ public abstract class Cipher {
 		setKey (data);
 	}
 
-
-	public static void main (String ... args) {
-	}
-
-
 }
