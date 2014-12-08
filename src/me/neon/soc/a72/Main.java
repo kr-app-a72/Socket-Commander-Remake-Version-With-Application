@@ -10,7 +10,6 @@ import me.neon.soc.a72.Command.CommandManager;
 import me.neon.soc.a72.Socket.SocketThread;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.miscunsafe.Cipher;
 
 public class Main extends JavaPlugin {
 	public ArrayList<String> ip = new ArrayList<String>();
@@ -49,9 +48,6 @@ public class Main extends JavaPlugin {
 		if (!(this.allowall = config.getBoolean("��� ���"))) {
 			this.ip = ((ArrayList<String>) config.get("��� IP"));
 		}
-		
-		Cipher cipher = Cipher.getCipher ("AES");
-		cipher.decode(null, null);
 		
 		initCommand();
 		this.s = new SocketThread(this, port);
