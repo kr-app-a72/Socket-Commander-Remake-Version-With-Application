@@ -33,6 +33,42 @@ public final class AES extends Cipher {
 			0;
 	}
 
+	private static char gmul (char first, char second) {
+		char third = 0, fourth;
+		long i = 0;
+
+		for (; i < 8 ; i ++) {
+			if ((second & 1) != 0)
+				third ^= first;
+
+			fourth = (char) (first & 0x80);
+			first <<= 1;
+
+			if (fourth != 0)
+				first ^= 0x1B;
+
+			second >>= 1;
+		}
+
+		return third;
+	}
+
+	private static char s_box (char data) {
+		return s_box [data];
+	}
+
+	private static char int_s_box (char data) {
+		return inv_s_box [data];
+	}
+
+	private static String base64_Encode (byte data []) {
+		return null;
+	}
+
+	private static char [] base64_Decode (String str) {
+		return null;
+	}
+
 	public boolean encode (char data [], char result []) {
 		return true;
 	}
