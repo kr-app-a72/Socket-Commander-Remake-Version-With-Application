@@ -17,8 +17,6 @@ import me.neon.soc.a72.Message.Message;
 class UserInfo
   extends Thread
 {
-  private InputStream is;
-  private OutputStream os;
   private DataInputStream dis;
   private DataOutputStream dos;
   private Socket user_socket;
@@ -33,16 +31,14 @@ class UserInfo
   {
     try
     {
-      this.is = this.user_socket.getInputStream();
-      this.dis = new DataInputStream(this.is);
-      this.os = this.user_socket.getOutputStream();
-      this.dos = new DataOutputStream(this.os);
+      this.dis = new DataInputStream(this.user_socket.getInputStream());
+      this.dos = new DataOutputStream(this.user_socket.getOutputStream());
       
-      Message.send_Message(dos,"Á¤»ó Á¢¼Ó µÇ¾ú½À´Ï´Ù");
+      Message.send_Message(dos,"ì •ìƒ ì ‘ì† ë˜ì—ˆìŠµë‹ˆë‹¤");
     }
     catch (Exception e)
     {
-      Message._send_Message("½ºÆ®¸² ¼ÂÆÃ ¿¡·¯\n");
+      Message._send_Message("ìŠ¤íŠ¸ë¦¼ ì…‹íŒ… ì—ëŸ¬\n");
     }
   }
   
@@ -59,12 +55,12 @@ class UserInfo
         {
           String _msg = msg.replace("/", "");
           Message.__send_Message(_msg);
-          Message.send_Message(dos,"ÀüÃ¼ ¸Ş¼¼Áö Àü¼Û ¼º°ø (" + _msg + ")");
+          Message.send_Message(dos,"ì „ì²´ ë©”ì„¸ì§€ ì „ì†¡ ì„±ê³µ (" + _msg + ")");
         }
         else
         {
           Message.InputtoServer(msg);
-          Message.send_Message(dos,"Ä¿¸Çµå Àü¼Û ¼º°ø (" + msg + ")");
+          Message.send_Message(dos,"ì»¤ë§¨ë“œ ì „ì†¡ ì„±ê³µ (" + msg + ")");
         }
       }
     }
@@ -75,7 +71,7 @@ class UserInfo
         this.dos.close();
         this.dis.close();
         this.user_socket.close();
-        Message._send_Message("»ç¿ëÀÚ Á¢¼ÓÀÌ ²÷¾îÁ³½À´Ï´Ù.\n");
+        Message._send_Message("ì‚¬ìš©ì ì ‘ì†ì´ ëŠì–´ì¡ŒìŠµë‹ˆë‹¤.\n");
         Main.Connection_Count--;
       }
       catch (Exception localException) {}
