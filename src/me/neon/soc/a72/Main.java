@@ -33,20 +33,20 @@ public class Main extends JavaPlugin {
 		FileConfiguration config = getConfig();
 		this.ip.add("127.0.0.1");
 		this.ip.add("0.0.0.0");
-		config.addDefault("��� ���", Boolean.valueOf(false));
-		config.addDefault("��� IP", this.ip);
-		config.addDefault("��Ʈ", -1);
+		config.addDefault("전체 허용",Boolean.valueOf(false));
+		config.addDefault("허용 IP", this.ip);
+		config.addDefault("포트", -1);
 		config.options().copyDefaults(true);
 		saveConfig();
-		if (config.getInt("��Ʈ") == -1) {
+		if (config.getInt("포트") == -1) {
 			port = Integer.valueOf(r.nextInt(65565) + 1).intValue();
-			config.set("��Ʈ", port);
+			config.set("포트", port);
 		} else {
-			port = config.getInt("��Ʈ");
+			port = config.getInt("포트");
 		}
 		this.ip = new ArrayList<String>();
-		if (!(this.allowall = config.getBoolean("��� ���"))) {
-			this.ip = ((ArrayList<String>) config.get("��� IP"));
+		if (!(this.allowall = config.getBoolean("전체 허용")))" {
+			this.ip = ((ArrayList<String>) config.get("허용 IP"));
 		}
 		
 		initCommand();
@@ -60,7 +60,7 @@ public class Main extends JavaPlugin {
 			return;
 		}
 		FileConfiguration config = getConfig();
-		config.addDefault("��� IP", this.ip);
+		config.addDefault("허용 IP", this.ip);
 		log.info(this.ip.toString());
 		saveConfig();
 	}
