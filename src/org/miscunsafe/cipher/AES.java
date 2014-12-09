@@ -19,6 +19,7 @@ package org.miscunsafe.cipher;
 
 import org.miscunsafe.Cipher;
 import org.miscunsafe.util.Boost;
+import java.util.Objects;
 
 public final class AES extends Cipher {
 
@@ -60,6 +61,15 @@ public final class AES extends Cipher {
 	private static char int_s_box (char data) {
 		return inv_s_box [data];
 	}
+	
+	public static String substitute (final String str) {
+		String ret = "";
+		char data [] = new char [str.length ()];
+		
+		Objects.requireNonNull (str).getChars (0, str.length (), data, 0);
+		
+		return ret;
+	}
 
 	private static String base64_Encode (byte data []) {
 		return null;
@@ -89,6 +99,10 @@ public final class AES extends Cipher {
 				this.key = new char [13] [24];
 			else if (rounds == 32)
 				this.key = new char [15] [32];
+				
+			System.arraycopy (key, 0, this.key [0], 0, key.length);
+			
+			
 		}
 
 		return true;
