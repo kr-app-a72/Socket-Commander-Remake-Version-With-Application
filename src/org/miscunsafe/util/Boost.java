@@ -24,6 +24,14 @@ import java.lang.management.GarbageCollectorMXBean;
 import java.lang.management.ManagementFactory;
 import java.util.List;
 
+/**
+ * yourmama397's boost class.
+ * This class contains several useless bullshit codes that might boost up speed, or
+ * delays software.
+ * This class cannot be instantiate by other classes from other package.
+ * @author yourmama397
+ * @version 0.1
+ */
 public final class Boost {
 
 	public Boost () {

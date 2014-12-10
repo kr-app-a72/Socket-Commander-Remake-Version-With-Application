@@ -87,7 +87,59 @@ public final class AES extends Cipher {
 		return data;
 	}
 	
-	public static char [] mixcolumns (AES this_, char data []) {
+	public static char [] shiftFrame (AES this_, char data []) throws CipherException {
+		if (!Objects.requireNonNull (this_).isInBlock (Objects.requireNonNull (data)))
+			throw new CipherException ("Block size error.");
+		
+		char ret [] = new char [data.length];
+		int key_len = this_.key [0].length;
+		
+		for (int i = 0 ; i < (data.length / 4) ; i ++)
+			ret [i] = data [i];
+		
+		for (int all = 0 ; all < data.length ; all += key_len) {
+			if (key_len == 16) {
+				ret [4 + all] = data [5];
+				ret [5 + all] = data [6];
+				ret [6 + all] = data [7];
+				ret [7 + all] = data [4];
+				ret [8 + all] = data [10];
+				ret [9 + all] = data [11];
+				ret [10 + all] = data [8];
+				ret [11 + all] = data [9];
+				ret [12 + all] = data [15];
+				ret [13 + all] = data [12];
+				ret [14 + all] = data [13];
+				ret [15 + all] = data [14];
+			}
+			else if (key_len == 24) {
+				
+			}
+			else if (key_len == 32) {
+				
+			}
+		}
+		
+		return ret;
+	}
+
+	public static char [] invShiftFrames (AES this_, char data []) {
+		if (!Objects.requireNonNull (this_).isInBlock (Objects.requireNonNull (data)))
+			return null;
+		
+		char ret [] = new char [data.length];
+		return ret;
+	}
+
+	public static char [] mixColumns (AES this_, char data []) {
+		if (!Objects.requireNonNull (this_).isInBlock (Objects.requireNonNull (data)))
+			return null;
+		
+		char ret [] = new char [data.length];
+		return ret;
+	}
+
+	public static char [] invMixColumns (AES this_, char data []) {
 		if (!Objects.requireNonNull (this_).isInBlock (Objects.requireNonNull (data)))
 			return null;
 		
@@ -103,14 +155,17 @@ public final class AES extends Cipher {
 		return null;
 	}
 
+	@Override
 	public boolean encode (char data [], char result []) {
 		return true;
 	}
 
+	@Override
 	public boolean decode (char data [], char result []) {
 		return true;
 	}
 
+	@Override
 	public boolean setKey (char key []) {
 		if (key.length != 16 && key.length != 24 && key.length != 32 && key.length < 16)
 			return false;
@@ -128,8 +183,7 @@ public final class AES extends Cipher {
 			
 			/*
 			 * 1. for-loop statement is slower than direct declaration.
-			 * 2. if statement inside for-loop statement is slower than for-loop statement inside if statement.
-			 * 3. If performance can be improved, code does need to be long enough to make people bored and dead.
+			 * 2. If performance can be improved, code does need to be long enough to make people bored and dead.
 			 */
 			if (key.length == 16) {
 				for (int i = 1 ; i < rounds ; i ++) {
