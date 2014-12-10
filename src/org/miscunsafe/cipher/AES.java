@@ -65,7 +65,7 @@ public final class AES extends Cipher {
 		return s_box [data];
 	}
 
-	private static char int_s_box (char data) {
+	private static char inv_s_box (char data) {
 		return inv_s_box [data];
 	}
 	
@@ -91,10 +91,11 @@ public final class AES extends Cipher {
 		if (!Objects.requireNonNull (this_).isInBlock (Objects.requireNonNull (data)))
 			return null;
 		
-		
+		char ret [] = new char [data.length];
+		return ret;
 	}
 
-	private static String base64_Encode (byte data []) {
+	private static String base64_encode (byte data []) {
 		return null;
 	}
 
@@ -125,31 +126,94 @@ public final class AES extends Cipher {
 				
 			System.arraycopy (key, 0, this.key [0], 0, key.length);
 			
+			/*
+			 * 1. for-loop statement is slower than direct declaration.
+			 * 2. if statement inside for-loop statement is slower than for-loop statement inside if statement.
+			 * 3. If performance can be improved, code does need to be long enough to make people bored and dead.
+			 */
 			if (key.length == 16) {
 				for (int i = 1 ; i < rounds ; i ++) {
-					key [i] [ 0] = (char) (key [i - 1] [ 0] ^ s_box (key [i - 1] [15]) ^ rcon [i - 1]);
-					key [i] [ 1] = (char) (key [i - 1] [ 1] ^ s_box (key [i - 1] [12]) ^ 0x00);
-					key [i] [ 2] = (char) (key [i - 1] [ 2] ^ s_box (key [i - 1] [13]) ^ 0x00);
-					key [i] [ 3] = (char) (key [i - 1] [ 3] ^ s_box (key [i - 1] [14]) ^ 0x00);
-					key [i] [ 4] = (char) (key [i] [ 0] ^ key [i - 1] [ 4]);
-					key [i] [ 5] = (char) (key [i] [ 1] ^ key [i - 1] [ 5]);
-					key [i] [ 6] = (char) (key [i] [ 2] ^ key [i - 1] [ 6]);
-					key [i] [ 7] = (char) (key [i] [ 3] ^ key [i - 1] [ 7]);
-					key [i] [ 8] = (char) (key [i] [ 4] ^ key [i - 1] [ 8]);
-					key [i] [ 9] = (char) (key [i] [ 5] ^ key [i - 1] [ 9]);
-					key [i] [10] = (char) (key [i] [ 6] ^ key [i - 1] [10]);
-					key [i] [11] = (char) (key [i] [ 7] ^ key [i - 1] [11]);
-					key [i] [12] = (char) (key [i] [ 8] ^ key [i - 1] [12]);
-					key [i] [13] = (char) (key [i] [ 9] ^ key [i - 1] [13]);
-					key [i] [14] = (char) (key [i] [10] ^ key [i - 1] [14]);
-					key [i] [15] = (char) (key [i] [11] ^ key [i - 1] [15]);
+					this.key [i] [ 0] = (char) (this.key [i - 1] [ 0] ^ s_box (this.key [i - 1] [15]) ^ rcon [i - 1]);
+					this.key [i] [ 1] = (char) (this.key [i - 1] [ 1] ^ s_box (this.key [i - 1] [12]) ^ 0x00);
+					this.key [i] [ 2] = (char) (this.key [i - 1] [ 2] ^ s_box (this.key [i - 1] [13]) ^ 0x00);
+					this.key [i] [ 3] = (char) (this.key [i - 1] [ 3] ^ s_box (this.key [i - 1] [14]) ^ 0x00);
+					this.key [i] [ 4] = (char) (this.key [i] [ 0] ^ this.key [i - 1] [ 4]);
+					this.key [i] [ 5] = (char) (this.key [i] [ 1] ^ this.key [i - 1] [ 5]);
+					this.key [i] [ 6] = (char) (this.key [i] [ 2] ^ this.key [i - 1] [ 6]);
+					this.key [i] [ 7] = (char) (this.key [i] [ 3] ^ this.key [i - 1] [ 7]);
+					this.key [i] [ 8] = (char) (this.key [i] [ 4] ^ this.key [i - 1] [ 8]);
+					this.key [i] [ 9] = (char) (this.key [i] [ 5] ^ this.key [i - 1] [ 9]);
+					this.key [i] [10] = (char) (this.key [i] [ 6] ^ this.key [i - 1] [10]);
+					this.key [i] [11] = (char) (this.key [i] [ 7] ^ this.key [i - 1] [11]);
+					this.key [i] [12] = (char) (this.key [i] [ 8] ^ this.key [i - 1] [12]);
+					this.key [i] [13] = (char) (this.key [i] [ 9] ^ this.key [i - 1] [13]);
+					this.key [i] [14] = (char) (this.key [i] [10] ^ this.key [i - 1] [14]);
+					this.key [i] [15] = (char) (this.key [i] [11] ^ this.key [i - 1] [15]);
 				}
 			}
 			else if (key.length == 24) {
-				
+				for (int i = 1 ; i < rounds ; i ++) {
+					this.key [i] [ 0] = (char) (this.key [i - 1] [ 0] ^ s_box (this.key [i - 1] [23]) ^ rcon [i - 1]);
+					this.key [i] [ 1] = (char) (this.key [i - 1] [ 1] ^ s_box (this.key [i - 1] [18]) ^ 0x00);
+					this.key [i] [ 2] = (char) (this.key [i - 1] [ 2] ^ s_box (this.key [i - 1] [19]) ^ 0x00);
+					this.key [i] [ 3] = (char) (this.key [i - 1] [ 3] ^ s_box (this.key [i - 1] [20]) ^ 0x00);
+					this.key [i] [ 4] = (char) (this.key [i - 1] [ 4] ^ s_box (this.key [i - 1] [21]) ^ 0x00);
+					this.key [i] [ 5] = (char) (this.key [i - 1] [ 5] ^ s_box (this.key [i - 1] [22]) ^ 0x00); 
+					this.key [i] [ 6] = (char) (this.key [i] [ 0] ^ this.key [i - 1] [ 6]);
+					this.key [i] [ 7] = (char) (this.key [i] [ 1] ^ this.key [i - 1] [ 7]);
+					this.key [i] [ 8] = (char) (this.key [i] [ 2] ^ this.key [i - 1] [ 8]);
+					this.key [i] [ 9] = (char) (this.key [i] [ 3] ^ this.key [i - 1] [ 9]);
+					this.key [i] [10] = (char) (this.key [i] [ 4] ^ this.key [i - 1] [10]);
+					this.key [i] [11] = (char) (this.key [i] [ 5] ^ this.key [i - 1] [11]);
+					this.key [i] [12] = (char) (this.key [i] [ 6] ^ this.key [i - 1] [12]);
+					this.key [i] [13] = (char) (this.key [i] [ 7] ^ this.key [i - 1] [13]);
+					this.key [i] [14] = (char) (this.key [i] [ 8] ^ this.key [i - 1] [14]);
+					this.key [i] [15] = (char) (this.key [i] [ 9] ^ this.key [i - 1] [15]);
+					this.key [i] [16] = (char) (this.key [i] [10] ^ this.key [i - 1] [16]);
+					this.key [i] [17] = (char) (this.key [i] [11] ^ this.key [i - 1] [17]);
+					this.key [i] [18] = (char) (this.key [i] [12] ^ this.key [i - 1] [18]);
+					this.key [i] [19] = (char) (this.key [i] [13] ^ this.key [i - 1] [19]);
+					this.key [i] [20] = (char) (this.key [i] [14] ^ this.key [i - 1] [20]);
+					this.key [i] [21] = (char) (this.key [i] [15] ^ this.key [i - 1] [21]);
+					this.key [i] [22] = (char) (this.key [i] [16] ^ this.key [i - 1] [22]);
+					this.key [i] [23] = (char) (this.key [i] [17] ^ this.key [i - 1] [23]);
+				}
 			}
 			else if (key.length == 32) {
-				
+				for (int i = 0 ; i < rounds ; i ++) {
+					this.key [i] [ 0] = (char) (this.key [i - 1] [ 0] ^ s_box (this.key [i - 1] [31]) ^ rcon [i - 1]);
+					this.key [i] [ 1] = (char) (this.key [i - 1] [ 1] ^ s_box (this.key [i - 1] [24]) ^ 0x00);
+					this.key [i] [ 2] = (char) (this.key [i - 1] [ 2] ^ s_box (this.key [i - 1] [25]) ^ 0x00);
+					this.key [i] [ 3] = (char) (this.key [i - 1] [ 3] ^ s_box (this.key [i - 1] [26]) ^ 0x00);
+					this.key [i] [ 4] = (char) (this.key [i - 1] [ 4] ^ s_box (this.key [i - 1] [27]) ^ 0x00);
+					this.key [i] [ 5] = (char) (this.key [i - 1] [ 5] ^ s_box (this.key [i - 1] [28]) ^ 0x00); 
+					this.key [i] [ 6] = (char) (this.key [i - 1] [ 6] ^ s_box (this.key [i - 1] [29]) ^ 0x00);
+					this.key [i] [ 7] = (char) (this.key [i - 1] [ 7] ^ s_box (this.key [i - 1] [30]) ^ 0x00); 
+					this.key [i] [ 8] = (char) (this.key [i] [ 0] ^ this.key [i - 1] [ 8]);
+					this.key [i] [ 9] = (char) (this.key [i] [ 1] ^ this.key [i - 1] [ 9]);
+					this.key [i] [10] = (char) (this.key [i] [ 2] ^ this.key [i - 1] [10]);
+					this.key [i] [11] = (char) (this.key [i] [ 3] ^ this.key [i - 1] [11]);
+					this.key [i] [12] = (char) (this.key [i] [ 4] ^ this.key [i - 1] [12]);
+					this.key [i] [13] = (char) (this.key [i] [ 5] ^ this.key [i - 1] [13]);
+					this.key [i] [14] = (char) (this.key [i] [ 6] ^ this.key [i - 1] [14]);
+					this.key [i] [15] = (char) (this.key [i] [ 7] ^ this.key [i - 1] [15]);
+					this.key [i] [16] = (char) (this.key [i] [ 8] ^ this.key [i - 1] [16]);
+					this.key [i] [17] = (char) (this.key [i] [ 9] ^ this.key [i - 1] [17]);
+					this.key [i] [18] = (char) (this.key [i] [10] ^ this.key [i - 1] [18]);
+					this.key [i] [19] = (char) (this.key [i] [11] ^ this.key [i - 1] [19]);
+					this.key [i] [20] = (char) (this.key [i] [12] ^ this.key [i - 1] [20]);
+					this.key [i] [21] = (char) (this.key [i] [13] ^ this.key [i - 1] [21]);
+					this.key [i] [22] = (char) (this.key [i] [14] ^ this.key [i - 1] [22]);
+					this.key [i] [23] = (char) (this.key [i] [15] ^ this.key [i - 1] [23]);
+					this.key [i] [24] = (char) (this.key [i] [16] ^ this.key [i - 1] [24]);
+					this.key [i] [25] = (char) (this.key [i] [17] ^ this.key [i - 1] [25]);
+					this.key [i] [26] = (char) (this.key [i] [ 9] ^ this.key [i - 1] [26]);
+					this.key [i] [27] = (char) (this.key [i] [10] ^ this.key [i - 1] [27]);
+					this.key [i] [28] = (char) (this.key [i] [11] ^ this.key [i - 1] [28]);
+					this.key [i] [29] = (char) (this.key [i] [12] ^ this.key [i - 1] [29]);
+					this.key [i] [30] = (char) (this.key [i] [13] ^ this.key [i - 1] [30]);
+					this.key [i] [31] = (char) (this.key [i] [14] ^ this.key [i - 1] [31]);
+				}
 			}
 		}
 
