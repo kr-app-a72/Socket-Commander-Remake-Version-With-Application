@@ -45,7 +45,7 @@ public class Main extends JavaPlugin {
 			port = config.getInt("포트");
 		}
 		this.ip = new ArrayList<String>();
-		if (!(this.allowall = config.getBoolean("전체 허용")))" {
+		if (!(this.allowall = config.getBoolean("전체 허용"))) {
 			this.ip = ((ArrayList<String>) config.get("허용 IP"));
 		}
 		
