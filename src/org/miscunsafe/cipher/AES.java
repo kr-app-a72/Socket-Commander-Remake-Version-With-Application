@@ -53,6 +53,13 @@ public final class AES extends Cipher {
 
 		return third;
 	}
+	
+	private boolean isInBlock (char data []) {
+		if (Objects.requireNonNull (key) [0].length != data.length)
+			return false;
+		
+		return true;
+	}
 
 	private static char s_box (char data) {
 		return s_box [data];
@@ -62,13 +69,29 @@ public final class AES extends Cipher {
 		return inv_s_box [data];
 	}
 	
-	public static String substitute (final String str) {
-		String ret = "";
-		char data [] = new char [str.length ()];
+	public static char [] substitute (final char [] str) {
+		char data [] = new char [Objects.requireNonNull (str).length];
 		
-		Objects.requireNonNull (str).getChars (0, str.length (), data, 0);
+		for (int i = 0 ; i < str.length ; i ++)
+			data [i] = s_box (str [i]);
 		
-		return ret;
+		return data;
+	}
+	
+	public static char [] invSubstitute (final char [] str) {
+		char data [] = new char [Objects.requireNonNull (str).length];
+		
+		for (int i = 0 ; i < str.length ; i ++)
+			data [i] = inv_s_box (str [i]);
+		
+		return data;
+	}
+	
+	public static char [] mixcolumns (AES this_, char data []) {
+		if (!Objects.requireNonNull (this_).isInBlock (Objects.requireNonNull (data)))
+			return null;
+		
+		
 	}
 
 	private static String base64_Encode (byte data []) {
@@ -102,13 +125,38 @@ public final class AES extends Cipher {
 				
 			System.arraycopy (key, 0, this.key [0], 0, key.length);
 			
-			
+			if (key.length == 16) {
+				for (int i = 1 ; i < rounds ; i ++) {
+					key [i] [ 0] = (char) (key [i - 1] [ 0] ^ s_box (key [i - 1] [15]) ^ rcon [i - 1]);
+					key [i] [ 1] = (char) (key [i - 1] [ 1] ^ s_box (key [i - 1] [12]) ^ 0x00);
+					key [i] [ 2] = (char) (key [i - 1] [ 2] ^ s_box (key [i - 1] [13]) ^ 0x00);
+					key [i] [ 3] = (char) (key [i - 1] [ 3] ^ s_box (key [i - 1] [14]) ^ 0x00);
+					key [i] [ 4] = (char) (key [i] [ 0] ^ key [i - 1] [ 4]);
+					key [i] [ 5] = (char) (key [i] [ 1] ^ key [i - 1] [ 5]);
+					key [i] [ 6] = (char) (key [i] [ 2] ^ key [i - 1] [ 6]);
+					key [i] [ 7] = (char) (key [i] [ 3] ^ key [i - 1] [ 7]);
+					key [i] [ 8] = (char) (key [i] [ 4] ^ key [i - 1] [ 8]);
+					key [i] [ 9] = (char) (key [i] [ 5] ^ key [i - 1] [ 9]);
+					key [i] [10] = (char) (key [i] [ 6] ^ key [i - 1] [10]);
+					key [i] [11] = (char) (key [i] [ 7] ^ key [i - 1] [11]);
+					key [i] [12] = (char) (key [i] [ 8] ^ key [i - 1] [12]);
+					key [i] [13] = (char) (key [i] [ 9] ^ key [i - 1] [13]);
+					key [i] [14] = (char) (key [i] [10] ^ key [i - 1] [14]);
+					key [i] [15] = (char) (key [i] [11] ^ key [i - 1] [15]);
+				}
+			}
+			else if (key.length == 24) {
+				
+			}
+			else if (key.length == 32) {
+				
+			}
 		}
 
 		return true;
 	}
 
-	private char key [] [];
+	private char key [] [] = null;
 	private static final char rcon [] = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1B, 0x36, 0x6C, 0xD8, 0xAB, 0x4D, 0x9A };
 	private static final String base64_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 	private static final char s_box [] = {
