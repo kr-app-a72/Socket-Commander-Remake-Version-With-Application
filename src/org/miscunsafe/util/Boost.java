@@ -91,5 +91,13 @@ public final class Boost {
 	public Cipher getAESCipher () {
 		return Cipher.getCipher ("AES");
 	}
+	
+	public void memcpy (char target [], int off, char src [], int add, int len) {
+		if (off < 0 || add >= len || off >= len || add < 0)
+			throw new IndexOutOfBoundsException ();
+
+		for (int i = off ; i < len ; i ++)
+			target [i] = src [add + i];
+	}
 
 }
