@@ -18,7 +18,6 @@
 package org.miscunsafe.cipher;
 
 import org.miscunsafe.Cipher;
-import org.miscunsafe.util.Boost;
 import java.util.Objects;
 
 public final class AES extends Cipher {
@@ -92,11 +91,10 @@ public final class AES extends Cipher {
 		
 		int key_len = this_.key [0].length;
 		char copy [] = new char [key_len];
-		Boost boost = new Boost ();
 		
 		for (int all = 0 ; all < data.length ; all += key_len) {
 			if (key_len == 16) {
-				boost.memcpy (copy, 0, data, all, key_len);
+				System.arraycopy (data, all, copy, 0, key_len);
 
 				data [4 + all] = copy [5];
 				data [5 + all] = copy [6];
@@ -128,11 +126,10 @@ public final class AES extends Cipher {
 		
 		int key_len = this_.key [0].length;
 		char copy [] = new char [key_len];
-		Boost boost = new Boost ();
 		
 		for (int all = 0 ; all < data.length ; all += key_len) {
 			if (key_len == 16) {
-				boost.memcpy (copy, 0, data, all, key_len);
+				System.arraycopy (data, all, copy, 0, key_len);
 
 				data [4 + all] = copy [7];
 				data [5 + all] = copy [4];
@@ -162,12 +159,10 @@ public final class AES extends Cipher {
 		if (!Objects.requireNonNull (this_).isInBlock (Objects.requireNonNull (data)))
 			return false;
 		
-		Boost boost = new Boost ();
-		
 		for (int i = 0 ; i < data.length ; i += 4) {
 			char res [] = new char [4], copy_ [] = new char [4];
-			
-			boost.memcpy (copy_, 0, data, i, 4);
+
+			System.arraycopy (data, i, copy_, 0, 4);
 
 			res [0] = (char) ((data [0 + i] << 1) ^ (0x1B & ((char) data [0 + i] >> 7)));
 			res [1] = (char) ((data [1 + i] << 1) ^ (0x1B & ((char) data [1 + i] >> 7)));
@@ -187,12 +182,10 @@ public final class AES extends Cipher {
 		if (!Objects.requireNonNull (this_).isInBlock (Objects.requireNonNull (data)))
 			return false;
 
-		Boost boost = new Boost ();
-
 		for (int i = 0 ; i < data.length ; i += 4) {
 			char copy_ [] = new char [4];
 
-			boost.memcpy (copy_, 0, data, i, 4);
+			System.arraycopy (data, i, copy_, 0, 4);
 
 			data [0 + i] = (char) (gmul (copy_ [0], (char) 14) ^ gmul (copy_ [3], (char) 9) ^ gmul (copy_ [2], (char) 13) ^ gmul (copy_ [1], (char) 11));
 			data [1 + i] = (char) (gmul (copy_ [1], (char) 14) ^ gmul (copy_ [0], (char) 9) ^ gmul (copy_ [3], (char) 13) ^ gmul (copy_ [2], (char) 11));
@@ -207,7 +200,7 @@ public final class AES extends Cipher {
 		return (data >= 0x20 && data < 0x7F) || data == '+' || data == '/';
 	}
 
-	private static String base64_encode (char data []) {
+	protected static String base64_encode (char data []) {
 		char arr_3 [] = new char [3], arr_4 [] = new char [4];
 		int i = 0, j = 0, k = 0, len = data.length;
 		StringBuilder ret = new StringBuilder ();
@@ -247,7 +240,7 @@ public final class AES extends Cipher {
 		return ret.toString ();
 	}
 
-	private static char [] base64_decode (String str) {
+	protected static char [] base64_decode (String str) {
 		char arr_3 [] = new char [3], arr_4 [] = new char [4], retc [];
 		int i = 0, j = 0, k = 0, len = str.length ();
 		StringBuilder ret = new StringBuilder ();
@@ -297,13 +290,11 @@ public final class AES extends Cipher {
 	}
 */
 	@Override
-	public boolean encode (char data [], char result []) throws CipherException {
-		return true;
+	public String encode (char data []) throws CipherException { return null;
 	}
 
 	@Override
-	public boolean decode (char data [], char result []) throws CipherException {
-		return true;
+	public char [] decode (String str) throws CipherException { return null;
 	}
 
 	@Override

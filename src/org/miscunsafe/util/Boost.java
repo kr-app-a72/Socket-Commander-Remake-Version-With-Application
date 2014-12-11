@@ -18,6 +18,7 @@
 package org.miscunsafe.util;
 
 import org.miscunsafe.Cipher;
+import org.miscunsafe.cipher.CipherException;
 import java.io.InputStream;
 import java.io.IOException;
 import java.lang.management.GarbageCollectorMXBean;
@@ -30,7 +31,7 @@ import java.util.List;
  * delays software.
  * This class cannot be instantiate by other classes from other package.
  * @author yourmama397
- * @version 0.5
+ * @version 0.6
  */
 public final class Boost {
 
@@ -94,20 +95,34 @@ public final class Boost {
 	}
 
 	public Cipher getAESCipher () {
-		return Cipher.getCipher ("AES");
-	}
-	
-	public void memcpy (char target [], int off, char src [], int add, int len) {
-		if (off < 0 || add < 0)
-			throw new IndexOutOfBoundsException ();
-
-		for (int i = off ; i < len ; i ++)
-			target [i] = src [add + i];
+		try {
+			return Cipher.getCipher (Cipher.AES_ENCRYPTION);
+		} catch (CipherException e) {
+		}
+		return null;
 	}
 
 	public char [] asCharArray (String str) {
 		char ret [] = new char [str.length ()];
 		str.getChars (0, str.length (), ret, 0);
+		return ret;
+	}
+
+	public char [] asCharArray (byte data []) {
+		char ret [] = new char [data.length];
+		
+		for (int i = 0 ; i < ret.length ; i ++)
+			ret [i] = ((char) data [i]);
+		
+		return ret;
+	}
+
+	public byte [] asByteArray (char data []) {
+		byte ret [] = new byte [data.length];
+		
+		for (int i = 0 ; i < ret.length ; i ++)
+			ret [i] = ((byte) data [i]);
+		
 		return ret;
 	}
 

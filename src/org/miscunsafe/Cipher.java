@@ -18,29 +18,40 @@
 package org.miscunsafe;
 
 import org.miscunsafe.cipher.AES;
+import org.miscunsafe.cipher.JavaAES;
 import org.miscunsafe.cipher.CipherException;
 
 /**
  * Cipher class.
  * This class is abstract class for encryptions.
  * @author yourmama397
- * @version 0.2
+ * @version 0.3
  */
 public strictfp abstract class Cipher extends Object {
 
 	protected Cipher () {
 	}
 
-	public static final Cipher getCipher (String str) {
-		if (str.equalsIgnoreCase ("AES"))
+	public static final Cipher getCipher (String str) throws CipherException {
+		if (str.equalsIgnoreCase ("JAES"))
+			return new JavaAES ();
+		else if (str.equalsIgnoreCase ("AES"))
 			return new AES ();
 
-		return null;
+		throw new CipherException ("Unknown cipher name.");
 	}
 
-	public abstract boolean encode (char data [], char result []) throws CipherException;
+	public void encode (char data [], char result []) throws CipherException {
+	}
 
-	public abstract boolean decode (char data [], char result []) throws CipherException;
+	public void decode (char data [], char result []) throws CipherException {
+	}
+	
+	public String encode (char data []) throws CipherException { return null;
+	}
+
+	public char [] decode (String str) throws CipherException { return null;
+	}
 
 	public abstract void setKey (char key []) throws CipherException;
 
@@ -69,6 +80,7 @@ public strictfp abstract class Cipher extends Object {
 		setKey (data);
 	}
 
-	public static final String AES_ = "AES";
+	public static final String AES_ENCRYPTION = "JAES";
+	public static final String AES_ENCRYPTION_ = "AES";
 
 }
