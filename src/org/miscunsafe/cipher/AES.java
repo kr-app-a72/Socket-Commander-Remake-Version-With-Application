@@ -167,14 +167,14 @@ public final class AES extends Cipher {
 		Boost boost = new Boost ();
 		
 		for (int i = 0 ; i < data.length ; i += 4) {
-			char res [] = new char [4], copy_ = new char [4];
+			char res [] = new char [4], copy_ [] = new char [4];
 			
-			boost.memcpy (copy_, 4, data, all. 4);
+			boost.memcpy (copy_, 4, data, i, 4);
 			
-			res [0] = (char) (data [0 + i] << 1) ^ (0x1B & ((byte) ((signed char) data [0 + i] >> 7)));
-			res [1] = (char) (data [1 + i] << 1) ^ (0x1B & ((byte) ((signed char) data [1 + i] >> 7)));
-			res [2] = (char) (data [2 + i] << 1) ^ (0x1B & ((byte) ((signed char) data [2 + i] >> 7)));
-			res [3] = (char) (data [3 + i] << 1) ^ (0x1B & ((byte) ((signed char) data [3 + i] >> 7)));
+			res [0] = (char) ((data [0 + i] << 1) ^ (0x1B & ((char) data [0 + i] >> 7)));
+			res [1] = (char) ((data [1 + i] << 1) ^ (0x1B & ((char) data [1 + i] >> 7)));
+			res [2] = (char) ((data [2 + i] << 1) ^ (0x1B & ((char) data [2 + i] >> 7)));
+			res [3] = (char) ((data [3 + i] << 1) ^ (0x1B & ((char) data [3 + i] >> 7)));
 			
 			ret [0 + i] = (char) (res [0] ^ copy_ [3] ^ copy_ [2] ^ res [1] ^ copy_ [1]);
 			ret [1 + i] = (char) (res [1] ^ copy_ [0] ^ copy_ [3] ^ res [2] ^ copy_ [2]);
@@ -193,16 +193,16 @@ public final class AES extends Cipher {
 		Boost boost = new Boost ();
 		
 		for (int i = 0 ; i < data.length ; i += 4) {
-			char res [] = new char [4], copy_ = new char [4];
+			char copy_ [] = new char [4];
 			
-			boost.memcpy (copy_, 4, data, all. 4);
+			boost.memcpy (copy_, 4, data, i, 4);
 			
-			input [0 + all] = (char) (gmul (copy_ [0], 14) ^ gmul (copy_ [3], 9) ^ gmul (copy_ [2], 13) ^ gmul (copy_ [1], 11));
-			input [1 + all] = (char) (gmul (copy_ [1], 14) ^ gmul (copy_ [0], 9) ^ gmul (copy_ [3], 13) ^ gmul (copy_ [2], 11));
-			input [2 + all] = (char) (gmul (copy_ [2], 14) ^ gmul (copy_ [1], 9) ^ gmul (copy_ [0], 13) ^ gmul (copy_ [3], 11));
-			input [3 + all] = (char) (gmul (copy_ [3], 14) ^ gmul (copy_ [2], 9) ^ gmul (copy_ [1], 13) ^ gmul (copy_ [0], 11));
+			ret [0 + i] = (char) (gmul (copy_ [0], (char) 14) ^ gmul (copy_ [3], (char) 9) ^ gmul (copy_ [2], (char) 13) ^ gmul (copy_ [1], (char) 11));
+			ret [1 + i] = (char) (gmul (copy_ [1], (char) 14) ^ gmul (copy_ [0], (char) 9) ^ gmul (copy_ [3], (char) 13) ^ gmul (copy_ [2], (char) 11));
+			ret [2 + i] = (char) (gmul (copy_ [2], (char) 14) ^ gmul (copy_ [1], (char) 9) ^ gmul (copy_ [0], (char) 13) ^ gmul (copy_ [3], (char) 11));
+			ret [3 + i] = (char) (gmul (copy_ [3], (char) 14) ^ gmul (copy_ [2], (char) 9) ^ gmul (copy_ [1], (char) 13) ^ gmul (copy_ [0], (char) 11));
 		}
-		
+
 		return ret;
 	}
 
@@ -210,7 +210,7 @@ public final class AES extends Cipher {
 		return null;
 	}
 
-	private static char [] base64_Decode (String str) {
+	private static char [] base64_decode (String str) {
 		return null;
 	}
 
