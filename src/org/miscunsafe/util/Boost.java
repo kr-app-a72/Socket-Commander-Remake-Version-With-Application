@@ -30,7 +30,7 @@ import java.util.List;
  * delays software.
  * This class cannot be instantiate by other classes from other package.
  * @author yourmama397
- * @version 0.1
+ * @version 0.4
  */
 public final class Boost {
 
@@ -93,11 +93,17 @@ public final class Boost {
 	}
 	
 	public void memcpy (char target [], int off, char src [], int add, int len) {
-		if (off < 0 || add >= len || off >= len || add < 0)
+		if (off < 0 || add < 0)
 			throw new IndexOutOfBoundsException ();
 
 		for (int i = off ; i < len ; i ++)
 			target [i] = src [add + i];
+	}
+	
+	public char [] asCharArray (String str) {
+		char ret [] = new char [str.length ()];
+		str.getChars (0, str.length (), ret, 0);
+		return ret;
 	}
 
 }

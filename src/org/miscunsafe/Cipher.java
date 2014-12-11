@@ -18,12 +18,15 @@
 package org.miscunsafe;
 
 import org.miscunsafe.cipher.AES;
+import org.miscunsafe.cipher.CipherException;
 
 /**
+ * Cipher class.
+ * This class is abstract class for encryptions.
  * @author yourmama397
- * @version 0.1
+ * @version 0.2
  */
-public abstract class Cipher {
+public strictfp abstract class Cipher extends Object {
 
 	protected Cipher () {
 	}
@@ -35,13 +38,13 @@ public abstract class Cipher {
 		return null;
 	}
 
-	public abstract boolean encode (char data [], char result []);
+	public abstract boolean encode (char data [], char result []) throws CipherException;
 
-	public abstract boolean decode (char data [], char result []);
+	public abstract boolean decode (char data [], char result []) throws CipherException;
 
-	public abstract boolean setKey (char key []);
+	public abstract void setKey (char key []) throws CipherException;
 
-	public void encodeString (String str) {
+	public void encodeString (String str) throws CipherException {
 		char data [] = new char [str.length ()], extra [] = new char [str.length ()];
 
 		str.getChars (0, str.length (), data, 0);
@@ -50,7 +53,7 @@ public abstract class Cipher {
 		System.arraycopy (extra, 0, data, 0, str.length ());
 	}
 
-	public void decodeString (String str) {
+	public void decodeString (String str) throws CipherException {
 		char data [] = new char [str.length ()], extra [] = new char [str.length ()];
 
 		str.getChars (0, str.length (), data, 0);
@@ -59,11 +62,13 @@ public abstract class Cipher {
 		System.arraycopy (extra, 0, data, 0, str.length ());
 	}
 
-	public void setKey (String str) {
+	public void setKey (String str) throws CipherException {
 		char data [] = new char [str.length ()];
 
 		str.getChars (0, str.length (), data, 0);
 		setKey (data);
 	}
+
+	public static final String AES_ = "AES";
 
 }

@@ -36,9 +36,8 @@ public final class AES extends Cipher {
 
 	private static char gmul (char first, char second) {
 		char third = 0, fourth;
-		long i = 0;
 
-		for (; i < 8 ; i ++) {
+		for (int i = 0 ; i < 8 ; i ++) {
 			if ((second & 1) != 0)
 				third ^= first;
 
@@ -55,7 +54,7 @@ public final class AES extends Cipher {
 	}
 	
 	private boolean isInBlock (char data []) {
-		if (Objects.requireNonNull (key) [0].length != data.length)
+		if (Objects.requireNonNull (key) [0].length % data.length != 0)
 			return false;
 		
 		return true;
@@ -87,30 +86,30 @@ public final class AES extends Cipher {
 		return data;
 	}
 	
-	public static char [] shiftFrame (AES this_, char data []) throws CipherException {
+	public static boolean shiftFrames (AES this_, char data []) {
 		if (!Objects.requireNonNull (this_).isInBlock (Objects.requireNonNull (data)))
-			throw new CipherException ("Block size error.");
+			return false;
 		
-		char ret [] = new char [data.length];
 		int key_len = this_.key [0].length;
-		
-		for (int i = 0 ; i < (data.length / 4) ; i ++)
-			ret [i] = data [i];
+		char copy [] = new char [key_len];
+		Boost boost = new Boost ();
 		
 		for (int all = 0 ; all < data.length ; all += key_len) {
 			if (key_len == 16) {
-				ret [4 + all] = data [5];
-				ret [5 + all] = data [6];
-				ret [6 + all] = data [7];
-				ret [7 + all] = data [4];
-				ret [8 + all] = data [10];
-				ret [9 + all] = data [11];
-				ret [10 + all] = data [8];
-				ret [11 + all] = data [9];
-				ret [12 + all] = data [15];
-				ret [13 + all] = data [12];
-				ret [14 + all] = data [13];
-				ret [15 + all] = data [14];
+				boost.memcpy (copy, 0, data, all, key_len);
+
+				data [4 + all] = copy [5];
+				data [5 + all] = copy [6];
+				data [6 + all] = copy [7];
+				data [7 + all] = copy [4];
+				data [8 + all] = copy [10];
+				data [9 + all] = copy [11];
+				data [10 + all] = copy [8];
+				data [11 + all] = copy [9];
+				data [12 + all] = copy [15];
+				data [13 + all] = copy [12];
+				data [14 + all] = copy [13];
+				data [15 + all] = copy [14];
 			}
 			else if (key_len == 24) {
 				
@@ -120,33 +119,33 @@ public final class AES extends Cipher {
 			}
 		}
 		
-		return ret;
+		return true;
 	}
 
-	public static char [] invShiftFrames (AES this_, char data []) {
+	public static boolean invShiftFrames (AES this_, char data []) {
 		if (!Objects.requireNonNull (this_).isInBlock (Objects.requireNonNull (data)))
-			return null;
+			return false;
 		
-		char ret [] = new char [data.length];
 		int key_len = this_.key [0].length;
-		
-		for (int i = 0 ; i < (data.length / 4) ; i ++)
-			ret [i] = data [i];
+		char copy [] = new char [key_len];
+		Boost boost = new Boost ();
 		
 		for (int all = 0 ; all < data.length ; all += key_len) {
 			if (key_len == 16) {
-				ret [4 + all] = data [7];
-				ret [5 + all] = data [4];
-				ret [6 + all] = data [5];
-				ret [7 + all] = data [6];
-				ret [8 + all] = data [10];
-				ret [9 + all] = data [11];
-				ret [10 + all] = data [8];
-				ret [11 + all] = data [9];
-				ret [12 + all] = data [13];
-				ret [13 + all] = data [14];
-				ret [14 + all] = data [15];
-				ret [15 + all] = data [12];
+				boost.memcpy (copy, 0, data, all, key_len);
+
+				data [4 + all] = copy [7];
+				data [5 + all] = copy [4];
+				data [6 + all] = copy [5];
+				data [7 + all] = copy [6];
+				data [8 + all] = copy [10];
+				data [9 + all] = copy [11];
+				data [10 + all] = copy [8];
+				data [11 + all] = copy [9];
+				data [12 + all] = copy [13];
+				data [13 + all] = copy [14];
+				data [14 + all] = copy [15];
+				data [15 + all] = copy [12];
 			}
 			else if (key_len == 24) {
 				
@@ -156,88 +155,184 @@ public final class AES extends Cipher {
 			}
 		}
 		
-		return ret;
+		return true;
 	}
 
-	public static char [] mixColumns (AES this_, char data []) {
+	public static boolean mixColumns (AES this_, char data []) {
 		if (!Objects.requireNonNull (this_).isInBlock (Objects.requireNonNull (data)))
-			return null;
+			return false;
 		
-		char ret [] = new char [data.length];
 		Boost boost = new Boost ();
 		
 		for (int i = 0 ; i < data.length ; i += 4) {
 			char res [] = new char [4], copy_ [] = new char [4];
 			
 			boost.memcpy (copy_, 4, data, i, 4);
-			
+
 			res [0] = (char) ((data [0 + i] << 1) ^ (0x1B & ((char) data [0 + i] >> 7)));
 			res [1] = (char) ((data [1 + i] << 1) ^ (0x1B & ((char) data [1 + i] >> 7)));
 			res [2] = (char) ((data [2 + i] << 1) ^ (0x1B & ((char) data [2 + i] >> 7)));
 			res [3] = (char) ((data [3 + i] << 1) ^ (0x1B & ((char) data [3 + i] >> 7)));
-			
-			ret [0 + i] = (char) (res [0] ^ copy_ [3] ^ copy_ [2] ^ res [1] ^ copy_ [1]);
-			ret [1 + i] = (char) (res [1] ^ copy_ [0] ^ copy_ [3] ^ res [2] ^ copy_ [2]);
-			ret [2 + i] = (char) (res [2] ^ copy_ [1] ^ copy_ [0] ^ res [3] ^ copy_ [3]);
-			ret [3 + i] = (char) (res [3] ^ copy_ [2] ^ copy_ [1] ^ res [0] ^ copy_ [0]);
+
+			data [0 + i] = (char) (res [0] ^ copy_ [3] ^ copy_ [2] ^ res [1] ^ copy_ [1]);
+			data [1 + i] = (char) (res [1] ^ copy_ [0] ^ copy_ [3] ^ res [2] ^ copy_ [2]);
+			data [2 + i] = (char) (res [2] ^ copy_ [1] ^ copy_ [0] ^ res [3] ^ copy_ [3]);
+			data [3 + i] = (char) (res [3] ^ copy_ [2] ^ copy_ [1] ^ res [0] ^ copy_ [0]);
 		}
 		
-		return ret;
+		return true;
 	}
 
-	public static char [] invMixColumns (AES this_, char data []) {
+	public static boolean invMixColumns (AES this_, char data []) {
 		if (!Objects.requireNonNull (this_).isInBlock (Objects.requireNonNull (data)))
-			return null;
-		
-		char ret [] = new char [data.length];
+			return false;
+
 		Boost boost = new Boost ();
 		
 		for (int i = 0 ; i < data.length ; i += 4) {
 			char copy_ [] = new char [4];
-			
+
 			boost.memcpy (copy_, 4, data, i, 4);
-			
-			ret [0 + i] = (char) (gmul (copy_ [0], (char) 14) ^ gmul (copy_ [3], (char) 9) ^ gmul (copy_ [2], (char) 13) ^ gmul (copy_ [1], (char) 11));
-			ret [1 + i] = (char) (gmul (copy_ [1], (char) 14) ^ gmul (copy_ [0], (char) 9) ^ gmul (copy_ [3], (char) 13) ^ gmul (copy_ [2], (char) 11));
-			ret [2 + i] = (char) (gmul (copy_ [2], (char) 14) ^ gmul (copy_ [1], (char) 9) ^ gmul (copy_ [0], (char) 13) ^ gmul (copy_ [3], (char) 11));
-			ret [3 + i] = (char) (gmul (copy_ [3], (char) 14) ^ gmul (copy_ [2], (char) 9) ^ gmul (copy_ [1], (char) 13) ^ gmul (copy_ [0], (char) 11));
+
+			data [0 + i] = (char) (gmul (copy_ [0], (char) 14) ^ gmul (copy_ [3], (char) 9) ^ gmul (copy_ [2], (char) 13) ^ gmul (copy_ [1], (char) 11));
+			data [1 + i] = (char) (gmul (copy_ [1], (char) 14) ^ gmul (copy_ [0], (char) 9) ^ gmul (copy_ [3], (char) 13) ^ gmul (copy_ [2], (char) 11));
+			data [2 + i] = (char) (gmul (copy_ [2], (char) 14) ^ gmul (copy_ [1], (char) 9) ^ gmul (copy_ [0], (char) 13) ^ gmul (copy_ [3], (char) 11));
+			data [3 + i] = (char) (gmul (copy_ [3], (char) 14) ^ gmul (copy_ [2], (char) 9) ^ gmul (copy_ [1], (char) 13) ^ gmul (copy_ [0], (char) 11));
 		}
 
-		return ret;
+		return true;
+	}
+	
+	private static boolean isBase64 (char data) {
+		return (data >= 0x20 && data < 0x7F) || data == '+' || data == '/';
 	}
 
-	private static String base64_encode (byte data []) {
-		return null;
+	private static String base64_encode (char data []) {
+		char arr_3 [] = new char [3], arr_4 [] = new char [4];
+		int i = 0, j = 0, k = 0, len = data.length;
+		StringBuilder ret = new StringBuilder ();
+
+		while ((len --) != 0) {
+			arr_3 [i ++] = data [k ++];
+
+			if (i == 3) {
+				arr_4 [0] = (char) ((arr_3 [0] & 0xFC) >> 2);
+				arr_4 [1] = (char) (((arr_3 [0] & 0x03) << 4) + ((arr_3 [1] & 0xF0) >> 4));
+				arr_4 [2] = (char) (((arr_3 [1] & 0x0F) << 2) + ((arr_3 [2] & 0xC0) >> 6));
+				arr_4 [3] = (char) (arr_3 [2] & 0x3F);
+
+				for (i = 0 ; i < 4 ; i ++)
+					ret.append (base64_chars.charAt(arr_4 [i]));
+
+				i = 0;
+			}
+		}
+
+		if (i != 0) { // If need to put extra character.
+			for (j = i ; j < 3 ; j ++)
+				arr_3 [j] = 0;
+
+			arr_4 [0] = (char) ((arr_3 [0] & 0xFC) >> 2);
+			arr_4 [1] = (char) (((arr_3 [0] & 0x03) << 4) + ((arr_3 [1] & 0xF0) >> 4));
+			arr_4 [2] = (char) (((arr_3 [1] & 0x0F) << 2) + ((arr_3 [2] & 0xC0) >> 6));
+			arr_4 [3] = (char) (arr_3 [2] & 0x3F);
+
+			for (j = 0 ; j < (i + 1) ; j ++)
+				ret.append (base64_chars.charAt (arr_4 [j]));
+
+			while (i ++ < 3)
+				ret.append ('=');
+		}
+
+		return ret.toString ();
 	}
 
 	private static char [] base64_decode (String str) {
-		return null;
-	}
+		char arr_3 [] = new char [3], arr_4 [] = new char [4], retc [];
+		int i = 0, j = 0, k = 0, len = str.length ();
+		StringBuilder ret = new StringBuilder ();
 
+		while (len != 0 && str.charAt (k) != '=' && isBase64 (str.charAt (k))) {
+			arr_4 [i ++] = str.charAt (k ++);
+			len --;
+
+			if (i == 4) {
+				for (i = 0 ; i < 4 ; i ++)
+					arr_4 [i] = (char) base64_chars.indexOf (arr_4 [i]);
+
+				arr_3 [0] = (char) ((arr_4 [0] << 2) + ((arr_4 [1] & 0x30) >> 4));
+				arr_3 [1] = (char) (((arr_4 [1] & 0x0F) << 4) + ((arr_4 [2] & 0x3C) >> 2));
+				arr_3 [2] = (char) (((arr_4 [2] & 0x03) << 6) + arr_4 [3]);
+
+				for (i = 0 ; i < 3 ; i ++)
+					ret.append (arr_3 [i]);
+
+				i = 0;
+			}
+		}
+
+		if (i != 0) { // left overs.
+			for (j = i ; j < 4 ; j ++)
+				arr_4 [j] = 0;
+
+			for (j = 0 ; j < 4 ; j ++)
+				arr_4 [j] = (char) base64_chars.indexOf (arr_4 [j]);
+
+			arr_3 [0] = (char) ((arr_4 [0] << 2) + ((arr_4 [1] & 0x30) >> 4));
+			arr_3 [1] = (char) (((arr_4 [1] & 0x0F) << 4) + ((arr_4 [2] & 0x3C) >> 2));
+			arr_3 [2] = (char) (((arr_4 [2] & 0x03) << 6) + arr_4 [3]);
+
+			for (j = 0 ; j < (i - 1) ; j ++) 
+				ret.append (arr_3 [j]);
+		}
+		
+		retc = new char [ret.toString ().length ()];
+		ret.toString ().getChars(0, ret.toString ().length (), retc, 0);
+
+		return retc;
+	}
+/*
+	// Used for test.
+	public static void main (String ... args) throws Throwable {
+		AES ___this = new AES ();
+		
+		___this.setKey ("TESTTESTTESTTEST");
+
+		char test [] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+
+		System.out.println (test);
+		mixColumns (___this, test);
+		
+		System.out.println (test);
+		
+		invMixColumns (___this, test);
+		System.out.println (test);
+	}
+*/
 	@Override
-	public boolean encode (char data [], char result []) {
+	public boolean encode (char data [], char result []) throws CipherException {
 		return true;
 	}
 
 	@Override
-	public boolean decode (char data [], char result []) {
+	public boolean decode (char data [], char result []) throws CipherException {
 		return true;
 	}
 
 	@Override
-	public boolean setKey (char key []) {
+	public void setKey (char key []) throws CipherException {
 		if (key.length != 16 && key.length != 24 && key.length != 32 && key.length < 16)
-			return false;
+			throw new CipherException ("Invalid Key Length.");
 		else {
 			int rounds = getRounds (key.length);
 
-			if (rounds == 16)
+			if (rounds == 9)
 				this.key = new char [11] [16];
-			else if (rounds == 24)
+			else if (rounds == 11)
 				this.key = new char [13] [24];
-			else if (rounds == 32)
+			else if (rounds == 13)
 				this.key = new char [15] [32];
-				
+			
 			System.arraycopy (key, 0, this.key [0], 0, key.length);
 			
 			/*
@@ -329,8 +424,6 @@ public final class AES extends Cipher {
 				}
 			}
 		}
-
-		return true;
 	}
 
 	private char key [] [] = null;
