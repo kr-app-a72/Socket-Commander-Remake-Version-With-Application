@@ -30,7 +30,7 @@ import java.util.List;
  * delays software.
  * This class cannot be instantiate by other classes from other package.
  * @author yourmama397
- * @version 0.4
+ * @version 0.5
  */
 public final class Boost {
 
@@ -38,18 +38,23 @@ public final class Boost {
 		String cname = getCallerClass ().getName ();
 
 		if (!cname.startsWith ("org.miscunsafe"))
-			throw new RuntimeException (buildString ("Class, ", cname, " is not allowed to use this class."));
+			throw new SecurityException (buildString ("Class, ", cname, " is not allowed to use this class."));
 	}
 
 	public String buildString (String str, Object ... obj) {
-		return new StringBuilder (str).append (obj).toString ();
+		StringBuilder sb = new StringBuilder (str);
+		
+		for (Object o : obj)
+			sb.append (o);
+		
+		return sb.toString ();
 	}
 
 	public Class <?> getCallerClass () {
 		StackTraceElement ste [] = (new Exception ()).getStackTrace ();
 
 		try {
-			return Class.forName(ste[ste.length - 2].getClassName());
+			return Class.forName(ste[ste.length - 1].getClassName());
 		} catch (ClassNotFoundException e) {
 			return null;
 		}
@@ -99,7 +104,7 @@ public final class Boost {
 		for (int i = off ; i < len ; i ++)
 			target [i] = src [add + i];
 	}
-	
+
 	public char [] asCharArray (String str) {
 		char ret [] = new char [str.length ()];
 		str.getChars (0, str.length (), ret, 0);
