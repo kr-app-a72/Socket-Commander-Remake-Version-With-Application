@@ -197,11 +197,11 @@ public final class AES extends Cipher {
 		return true;
 	}
 
-/*
+
 	// Used for test.
 	public static void main (String ... args) throws Throwable {
 	}
-*/
+
 	@Override
 	public String encode (char data []) throws CipherException {
 		Boost boost = new Boost ();
