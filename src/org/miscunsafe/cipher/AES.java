@@ -18,6 +18,7 @@
 package org.miscunsafe.cipher;
 
 import org.miscunsafe.Cipher;
+import org.miscunsafe.util.Boost;
 import java.util.Objects;
 
 public final class AES extends Cipher {
@@ -195,10 +196,6 @@ public final class AES extends Cipher {
 
 		return true;
 	}
-	
-	private static boolean isBase64 (char data) {
-		return (data >= 0x20 && data < 0x7F) || data == '+' || data == '/';
-	}
 
 /*
 	// Used for test.
@@ -213,7 +210,7 @@ public final class AES extends Cipher {
 		char buffer [];
 		int rounds = getRounds (key [0].length);
 		
-		buffer_s = boost.base64_encode (buffer);
+		buffer_s = boost.base64_encode (data);
 		buffer = new char [buffer_s.length ()];
 		
 		buffer_s.getChars (0, buffer_s.length (), buffer, 0);
@@ -354,7 +351,6 @@ public final class AES extends Cipher {
 
 	private char key [] [] = null;
 	private static final char rcon [] = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1B, 0x36, 0x6C, 0xD8, 0xAB, 0x4D, 0x9A };
-	private static final String base64_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 	private static final char s_box [] = {
 		0x63, 0x7C, 0x77, 0x7B, 0xF2, 0x6B, 0x6F, 0xC5, 0x30, 0x01, 0x67, 0x2B, 0xFE, 0xD7, 0xAB, 0x76, 
 		0xCA, 0x82, 0xC9, 0x7D, 0xFA, 0x59, 0x47, 0xF0, 0xAD, 0xD4, 0xA2, 0xAF, 0x9C, 0xA4, 0x72, 0xC0, 

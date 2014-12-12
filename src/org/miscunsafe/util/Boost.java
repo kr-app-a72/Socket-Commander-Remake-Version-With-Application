@@ -19,6 +19,7 @@ package org.miscunsafe.util;
 
 import org.miscunsafe.Cipher;
 import org.miscunsafe.cipher.CipherException;
+
 import java.io.InputStream;
 import java.io.IOException;
 import java.lang.management.GarbageCollectorMXBean;
@@ -210,5 +211,11 @@ public final class Boost {
 
 		return retc;
 	}
+
+	public static boolean isBase64 (char data) {
+		return (data >= 0x20 && data < 0x7F) || data == '+' || data == '/';
+	}
+
+	private static final String base64_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 }
