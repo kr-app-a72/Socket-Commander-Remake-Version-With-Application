@@ -19,7 +19,6 @@ package org.miscunsafe.util;
 
 import org.miscunsafe.Cipher;
 import org.miscunsafe.cipher.CipherException;
-
 import java.io.InputStream;
 import java.io.IOException;
 import java.lang.management.GarbageCollectorMXBean;
