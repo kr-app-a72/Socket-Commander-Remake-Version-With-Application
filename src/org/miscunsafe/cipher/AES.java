@@ -210,9 +210,33 @@ public final class AES extends Cipher {
 		Boost boost = new Boost ();
 		StringBuilder ret = new StringBuilder ();
 		String buffer_s;
-		char buffer [] = new char [data.length ()];
+		char buffer [];
+		int rounds = getRounds (key [0].length);
 		
-		System.arraycopy (data, 0, buffer, 0, buffer.length);
+		buffer_s = boost.base64_encode (buffer);
+		buffer = new char [buffer_s.length ()];
+		
+		buffer_s.getChars (0, buffer_s.length (), buffer, 0);
+		
+		// PKCS7 padding.
+		if (buffer.length % key [0].length != 0) {
+			int push = key [0].length - (buffer.length % key [0].length);
+			
+			for (int i = 0 ; i < push ; i ++)
+				;
+		}
+		
+		// Init Process.
+		for (int i = 0 ; i < buffer.length ; i ++)
+			buffer [i] ^= key [0] [i % key [0].length];
+			
+		for (int i = 0 ; i < rounds ; i ++) {
+			// S-Box -> ShiftFrames -> MixColumns -> AddRoundKey.
+			for (int j = 0 ; j < buffer.length ; j ++)
+				buffer [j] = s_box [j];
+			
+			
+		}
 		
 		return ret.toString ();
 	}
