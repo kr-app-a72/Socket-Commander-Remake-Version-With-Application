@@ -21,7 +21,7 @@ public final class JavaAES extends Cipher {
 			javax.crypto.Cipher cipher = javax.crypto.Cipher.getInstance ("AES/ECB/PKCS7Padding");
 			cipher.init (javax.crypto.Cipher.ENCRYPT_MODE, secretKey);
 
-			return AES.base64_encode (boost.asCharArray(cipher.doFinal (boost.asByteArray (data))));
+			return boost.base64_encode (boost.asCharArray(cipher.doFinal (boost.asByteArray (data))));
 		} catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
 			throw new CipherException (e.getLocalizedMessage ());
 		}
@@ -35,7 +35,7 @@ public final class JavaAES extends Cipher {
 			javax.crypto.Cipher cipher = javax.crypto.Cipher.getInstance ("AES/ECB/PKCS7Padding");
 			cipher.init (javax.crypto.Cipher.DECRYPT_MODE, secretKey);
 
-			return boost.asCharArray(cipher.doFinal (boost.asByteArray (AES.base64_decode (str))));
+			return boost.asCharArray(cipher.doFinal (boost.asByteArray (boost.base64_decode (str))));
 		} catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
 			throw new CipherException (e.getLocalizedMessage ());
 		}
