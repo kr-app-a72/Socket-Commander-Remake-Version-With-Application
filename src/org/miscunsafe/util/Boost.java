@@ -29,17 +29,12 @@ import java.util.List;
  * yourmama397's boost class.
  * This class contains several useless bullshit codes that might boost up speed, or
  * delays software.
- * This class cannot be instantiate by other classes from other package.
  * @author yourmama397
  * @version 0.7
  */
 public final class Boost {
 
 	public Boost () {
-		String cname = getCallerClass ().getName ();
-
-		if (!cname.startsWith ("org.miscunsafe"))
-			throw new SecurityException (buildString ("Class, ", cname, " is not allowed to use this class."));
 	}
 
 	public String buildString (String str, Object ... obj) {
@@ -211,7 +206,7 @@ public final class Boost {
 		return retc;
 	}
 
-	public static boolean isBase64 (char data) {
+	public boolean isBase64 (char data) {
 		return (data >= 0x20 && data < 0x7F) || data == '+' || data == '/';
 	}
 

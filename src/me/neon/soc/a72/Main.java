@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.logging.Logger;
-
 import me.neon.soc.a72.Command.CommandManager;
 import me.neon.soc.a72.Socket.SocketThread;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -19,11 +18,8 @@ public class Main extends JavaPlugin {
 	public static Logger log = Logger.getLogger("Minecraft");
 	public boolean allowall;
 	private SocketThread s;
-	public static String Load = "";
-	public static boolean version = true;
-	public static boolean fail = false;
-	public static String VERSION = "2";
-	public static boolean stop = false;
+	public static String Load = "", VERSION = "2";
+	public static boolean version = true, fail = false, stop = false;
 	private static CommandManager Command;
 	public int port = 0;
 	public static int Connection_Count = 0;

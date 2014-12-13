@@ -17,7 +17,6 @@
 
 package org.miscunsafe;
 
-import org.miscunsafe.cipher.AES;
 import org.miscunsafe.cipher.JavaAES;
 import org.miscunsafe.cipher.CipherException;
 
@@ -35,8 +34,6 @@ public strictfp abstract class Cipher extends Object {
 	public static final Cipher getCipher (String str) throws CipherException {
 		if (str.equalsIgnoreCase ("JAES"))
 			return new JavaAES ();
-		else if (str.equalsIgnoreCase ("AES"))
-			return new AES ();
 
 		throw new CipherException ("Unknown cipher name.");
 	}
@@ -81,6 +78,5 @@ public strictfp abstract class Cipher extends Object {
 	}
 
 	public static final String AES_ENCRYPTION = "JAES";
-	public static final String AES_ENCRYPTION_ = "AES";
 
 }
