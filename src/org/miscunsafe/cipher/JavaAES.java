@@ -15,6 +15,11 @@ import org.miscunsafe.util.Boost;
 public final class JavaAES extends Cipher {
 	
 	public JavaAES () throws CipherException {
+		Boost boost = new Boost ();
+		
+		if (!boost.getCallerClass ().getName ().startsWith ("org.miscunsafe"))
+			throw SecurityException ();
+
 		try {
 			this.cipher = javax.crypto.Cipher.getInstance ("AES/ECB/PKCS5Padding");
 		} catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
