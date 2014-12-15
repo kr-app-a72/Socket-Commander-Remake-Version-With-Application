@@ -37,6 +37,13 @@ public final class Boost {
 	public Boost () {
 	}
 
+	/**
+	 * Builds string.
+	 * Instead of adding strings together, building strings, and other craps with StringBuilder
+	 * is faster than adding it.
+	 * @param str Base string.
+	 * @param obj Other random things.
+	 */
 	public String buildString (String str, Object ... obj) {
 		StringBuilder sb = new StringBuilder (str);
 		
@@ -46,16 +53,31 @@ public final class Boost {
 		return sb.toString ();
 	}
 
-	public Class <?> getCallerClass () {
+	/**
+	 * Returns caller class.
+	 * This method could slow down your software instead of speeding up.
+	 * When there was no caller class, which case that will not happen, or could not find class,
+	 * it will return null.
+	 * @param i Index. Set to 0 when you are not smart about it.
+	 */
+	public Class <?> getCallerClass (int i) {
 		StackTraceElement ste [] = (new Exception ()).getStackTrace ();
 
 		try {
-			return Class.forName(ste[ste.length - 1].getClassName());
+			return Class.forName(ste [ste.length - 1 - i].getClassName());
 		} catch (ClassNotFoundException e) {
 			return null;
 		}
 	}
 
+	/**
+	 * Garbage collection.
+	 * As soon as you call this baby, this method will call the Mr. Garbage Collector,
+	 * and clean up the mess.
+	 * This method does not forces him or her to collect craps.
+	 * If you want to force them to collect the mess, type in while (gc () == 0);
+	 * @return This value means that how many garbage collections were occured.
+	 */
 	public int gc () {
 		List <GarbageCollectorMXBean> gcmb = ManagementFactory.getGarbageCollectorMXBeans();
 		int bf = 0, at = 0;
@@ -71,16 +93,25 @@ public final class Boost {
 		return at - bf;
 	}
 
+	/**
+	 * Reads stream.
+	 * This method is as quite as your mom.
+	 * @param is Input stream.
+	 * @param test Data will be stored in this array. Must be initialized.
+	 * @return Length of data. If this returns -1, there was an error.
+	 */
 	public int fread (InputStream is, byte test []) {
 		try {
 			return is.read (test, 0, test.length);
 		} catch (IOException e) {
-			e.printStackTrace ();
 		}
 
 		return -1;
 	}
 
+	/**
+	 * You figure it out.
+	 */
 	public String requireStartsWith (String str, String target) {
 		if (str.startsWith (target));
 		else
