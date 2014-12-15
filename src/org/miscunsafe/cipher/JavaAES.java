@@ -17,7 +17,7 @@ public final class JavaAES extends Cipher {
 	public JavaAES () throws CipherException {
 		Boost boost = new Boost ();
 		
-		if (!boost.getCallerClass ().getName ().startsWith ("org.miscunsafe"))
+		if (!boost.getCallerClass ().getName (0).startsWith ("org.miscunsafe"))
 			throw SecurityException ();
 
 		try {
