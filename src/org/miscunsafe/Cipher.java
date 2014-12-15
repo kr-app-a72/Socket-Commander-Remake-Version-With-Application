@@ -114,10 +114,7 @@ public strictfp abstract class Cipher extends Object {
 	 * @return String Result of decoding. 
 	 */
 	public String decodeString (String str) throws CipherException {
-		char data [] = new char [str.length ()];
-
-		str.getChars (0, str.length (), data, 0);
-		return decode (data);
+		return new String (decode (str));
 	}
 
 	/**

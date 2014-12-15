@@ -17,8 +17,8 @@ public final class JavaAES extends Cipher {
 	public JavaAES () throws CipherException {
 		Boost boost = new Boost ();
 		
-		if (!boost.getCallerClass ().getName (0).startsWith ("org.miscunsafe"))
-			throw SecurityException ();
+		if (!boost.getCallerClass (1).equals (Cipher.class))
+			throw new SecurityException ();
 
 		try {
 			this.cipher = javax.crypto.Cipher.getInstance ("AES/ECB/PKCS5Padding");

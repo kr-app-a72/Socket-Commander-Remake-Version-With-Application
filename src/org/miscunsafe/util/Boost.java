@@ -237,6 +237,7 @@ public final class Boost {
 		return retc;
 	}
 
+
 	public boolean isBase64 (char data) {
 		return (data >= 0x20 && data < 0x7F) || data == '+' || data == '/';
 	}
