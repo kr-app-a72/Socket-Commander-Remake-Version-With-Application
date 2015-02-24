@@ -20,7 +20,7 @@ public class Main extends JavaPlugin {
 	private SocketThread s;
 	public static String Load = "", VERSION = "2";
 	public static boolean version = true, fail = false, stop = false;
-	private static CommandManager Command;
+	private static CommandManager com_manager;
 	public int port = 0;
 	public static int Connection_Count = 0;
 
@@ -44,8 +44,10 @@ public class Main extends JavaPlugin {
 		if (!(this.allowall = config.getBoolean("전체 허용"))) {
 			this.ip = ((ArrayList<String>) config.get("허용 IP"));
 		}
-		
-		initCommand();
+
+		com_manager = new CommandManager (this);
+		getCommand("soc").setExecutor (com_manager);
+
 		this.s = new SocketThread(this, port);
 	}
 
@@ -59,11 +61,6 @@ public class Main extends JavaPlugin {
 		config.addDefault("허용 IP", this.ip);
 		log.info(this.ip.toString());
 		saveConfig();
-	}
-
-	public void initCommand() {
-		Command = new CommandManager(this);
-		getCommand("soc").setExecutor(Command);
 	}
 
 	
