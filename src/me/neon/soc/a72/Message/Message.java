@@ -23,7 +23,7 @@ public class Message {
 		try {
 			dos.writeUTF(str);
 		} catch (IOException e) {
-			_send_Message("¸Þ½ÃÁö ¼Û½Å ¿¡·¯ ¹ß»ý\n");
+			_send_Message("ë©”ì„¸ì§€ë¥¼ ë³´ë‚´ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.\n");
 		}
 	}
 }
