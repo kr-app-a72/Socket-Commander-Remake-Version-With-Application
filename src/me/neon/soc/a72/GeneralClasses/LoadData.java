@@ -14,16 +14,16 @@ public class LoadData {
 
 	public static void M_$sjnSa1() {
 		$Sfks.add(Bukkit.getServer().getBukkitVersion());
-		Bukkit.broadcastMessage(ChatColor.GREEN + "¹öÀü : "
+		Bukkit.broadcastMessage(ChatColor.GREEN + "ë²„ì „: "
 				+ Bukkit.getServer().getBukkitVersion());
 		$Sfks.add(Bukkit.getServer().getIp());
 		Bukkit.broadcastMessage(ChatColor.GREEN + "IP : "
 				+ Bukkit.getServer().getIp().toString());
 		$Sfks.add(String.valueOf(Bukkit.getServer().getPort()));
-		Bukkit.broadcastMessage(ChatColor.GREEN + "Æ÷Æ® : "
+		Bukkit.broadcastMessage(ChatColor.GREEN + "í¬íŠ¸: "
 				+ String.valueOf(Bukkit.getServer().getPort()));
 		$Sfks.add(String.valueOf(Bukkit.getServer().getMaxPlayers()));
-		Bukkit.broadcastMessage(ChatColor.GREEN + "ÃÖ´ë ÇÃ·¹ÀÌ¾î : "
+		Bukkit.broadcastMessage(ChatColor.GREEN + "ìµœëŒ€ ìœ ì €ìˆ˜ : "
 				+ String.valueOf(Bukkit.getServer().getMaxPlayers()));
 		$Sfks.add(Bukkit.getServer().getMotd());
 		Bukkit.broadcastMessage(ChatColor.GREEN + "Motd : "
